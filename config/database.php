@@ -5,7 +5,7 @@ $conn = pg_connect(
      port=5432
      dbname=optical_store
      user=postgres
-     password=reena"
+     password=your_password"
 );
 
 if (!$conn) {
