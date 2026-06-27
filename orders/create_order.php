@@ -7,17 +7,31 @@ include("../includes/header.php");
 include("../includes/navbar.php");
 
 $customers = pg_query(
-$conn,
-"SELECT customer_id, customer_name
-FROM customers
-ORDER BY customer_name"
+    $conn,
+    "SELECT customer_id, customer_name
+     FROM customers
+     ORDER BY customer_name"
 );
 
 $products = pg_query(
-$conn,
-"SELECT product_id, product_name, price, stock
-FROM products
-ORDER BY product_name"
+    $conn,
+    "SELECT product_id, product_name, price, stock
+     FROM products
+     ORDER BY product_name"
+);
+
+$lenses = pg_query(
+    $conn,
+    "SELECT lens_id, lens_name, price
+     FROM lens_types
+     ORDER BY lens_name"
+);
+
+$coatings = pg_query(
+    $conn,
+    "SELECT coating_id, coating_name, price
+     FROM lens_coatings
+     ORDER BY coating_name"
 );
 
 ?>
@@ -31,14 +45,14 @@ ORDER BY product_name"
 <div class="container-fluid">
 
 <h2 class="mb-4">
-<i class="bi bi-receipt"></i>
-Create New Order
+    <i class="bi bi-receipt"></i>
+    Create New Order
 </h2>
 
 <div class="card shadow">
 
 <div class="card-header bg-primary text-white">
-Order Information
+    Order Information
 </div>
 
 <div class="card-body">
@@ -48,193 +62,194 @@ Order Information
 <div class="row">
 
 <div class="col-md-6 mb-3">
+    <label class="form-label">Customer</label>
 
-<label class="form-label">Customer</label>
+    <select name="customer_id" class="form-select" required>
+        <option value="">Select Customer</option>
 
-<select
-name="customer_id"
-class="form-select"
-required>
-
-<option value="">Select Customer</option>
-
-<?php while($c = pg_fetch_assoc($customers)) { ?>
-
-<option value="<?= $c['customer_id']; ?>">
-<?= htmlspecialchars($c['customer_name']); ?>
-</option>
-
-<?php } ?>
-
-</select>
-
+        <?php while($c = pg_fetch_assoc($customers)) { ?>
+            <option value="<?= $c['customer_id']; ?>">
+                <?= htmlspecialchars($c['customer_name']); ?>
+            </option>
+        <?php } ?>
+    </select>
 </div>
 
 <div class="col-md-3 mb-3">
+    <label class="form-label">Payment Status</label>
 
-<label class="form-label">Payment Status</label>
-
-<select
-name="payment_status"
-class="form-select">
-
-<option value="Pending">Pending</option>
-<option value="Paid">Paid</option>
-
-</select>
-
+    <select name="payment_status" class="form-select">
+        <option value="Pending">Pending</option>
+        <option value="Paid">Paid</option>
+    </select>
 </div>
 
 <div class="col-md-3 mb-3">
+    <label class="form-label">Payment Mode</label>
 
-<label class="form-label">Payment Mode</label>
-
-<select
-name="payment_mode"
-class="form-select">
-
-<option>Cash</option>
-<option>UPI</option>
-<option>Card</option>
-
-</select>
-
+    <select name="payment_mode" class="form-select">
+        <option>Cash</option>
+        <option>UPI</option>
+        <option>Card</option>
+    </select>
 </div>
 
 <hr class="my-4">
 
 <h4 class="mb-3">
-
-Products
-
+    Frame / Product
 </h4>
 
 <div class="col-md-6 mb-3">
+    <label class="form-label">Frame / Product</label>
 
-<label class="form-label">
+    <select name="product_id" id="product_id" class="form-select" required>
+        <option value="">Select Frame / Product</option>
 
-Product
-
-</label>
-
-<select
-name="product_id"
-id="product_id"
-class="form-select"
-required>
-
-<option value="">Select Product</option>
-
-<?php while($p = pg_fetch_assoc($products)) { ?>
-
-<option
-
-value="<?= $p['product_id']; ?>"
-
-data-price="<?= $p['price']; ?>"
-
-data-stock="<?= $p['stock']; ?>">
-
-<?= htmlspecialchars($p['product_name']); ?>
-
-(₹<?= $p['price']; ?>)
-
-| Stock: <?= $p['stock']; ?>
-
-</option>
-
-<?php } ?>
-
-</select>
-
+        <?php while($p = pg_fetch_assoc($products)) { ?>
+            <option
+                value="<?= $p['product_id']; ?>"
+                data-price="<?= $p['price']; ?>"
+                data-stock="<?= $p['stock']; ?>"
+            >
+                <?= htmlspecialchars($p['product_name']); ?>
+                (₹<?= $p['price']; ?>)
+                | Stock: <?= $p['stock']; ?>
+            </option>
+        <?php } ?>
+    </select>
 </div>
 
 <div class="col-md-3 mb-3">
+    <label class="form-label">Available Stock</label>
 
-<label class="form-label">
-
-Available Stock
-
-</label>
-
-<input
-type="text"
-id="stock"
-class="form-control"
-readonly>
-
+    <input
+        type="text"
+        id="stock"
+        class="form-control"
+        readonly>
 </div>
 
 <div class="col-md-3 mb-3">
+    <label class="form-label">Frame Price</label>
 
-<label class="form-label">
+    <input
+        type="text"
+        id="price"
+        class="form-control"
+        readonly>
+</div>
 
-Price
+<hr class="my-4">
 
-</label>
+<h4 class="mb-3">
+    Lens Package
+</h4>
 
-<input
-type="text"
-id="price"
-class="form-control"
-readonly>
+<div class="col-md-6 mb-3">
+    <label class="form-label">Lens Type</label>
 
+    <select name="lens_id" id="lens_id" class="form-select">
+        <option value="" data-price="0">No Lens</option>
+
+        <?php while($l = pg_fetch_assoc($lenses)) { ?>
+            <option
+                value="<?= $l['lens_id']; ?>"
+                data-price="<?= $l['price']; ?>"
+            >
+                <?= htmlspecialchars($l['lens_name']); ?>
+                - ₹<?= $l['price']; ?>
+            </option>
+        <?php } ?>
+    </select>
+</div>
+
+<div class="col-md-6 mb-3">
+    <label class="form-label">Lens Coating</label>
+
+    <select name="coating_id" id="coating_id" class="form-select">
+        <option value="" data-price="0">No Coating</option>
+
+        <?php while($co = pg_fetch_assoc($coatings)) { ?>
+            <option
+                value="<?= $co['coating_id']; ?>"
+                data-price="<?= $co['price']; ?>"
+            >
+                <?= htmlspecialchars($co['coating_name']); ?>
+                - ₹<?= $co['price']; ?>
+            </option>
+        <?php } ?>
+    </select>
 </div>
 
 <div class="col-md-3 mb-3">
+    <label class="form-label">Quantity</label>
 
-<label class="form-label">
-
-Quantity
-
-</label>
-
-<input
-type="number"
-name="quantity"
-id="quantity"
-class="form-control"
-min="1"
-required>
-
+    <input
+        type="number"
+        name="quantity"
+        id="quantity"
+        class="form-control"
+        min="1"
+        value="1"
+        required>
 </div>
 
 <div class="col-md-3 mb-3">
+    <label class="form-label">Lens Price</label>
 
-<label class="form-label">
+    <input
+        type="text"
+        id="lens_price"
+        class="form-control"
+        readonly>
+</div>
 
-Total Amount
+<div class="col-md-3 mb-3">
+    <label class="form-label">Coating Price</label>
 
-</label>
+    <input
+        type="text"
+        id="coating_price"
+        class="form-control"
+        readonly>
+</div>
 
-<input
-type="text"
-id="total"
-class="form-control fw-bold bg-light"
-readonly>
+<div class="col-md-3 mb-3">
+    <label class="form-label">Grand Total</label>
 
+    <input
+        type="text"
+        id="total"
+        class="form-control fw-bold bg-light"
+        readonly>
+</div>
+
+<div class="col-md-12 mb-3">
+    <label class="form-label">Remarks</label>
+
+    <textarea
+        name="remarks"
+        class="form-control"
+        rows="3"
+        placeholder="Example: Use customer prescription, blue cut lens, urgent delivery"></textarea>
 </div>
 
 <div class="col-md-12 mt-4">
+    <button
+        type="submit"
+        class="btn btn-success btn-lg">
 
-<button
-type="submit"
-class="btn btn-success btn-lg">
+        <i class="bi bi-check-circle-fill"></i>
+        Place Order
+    </button>
 
-<i class="bi bi-check-circle-fill"></i>
+    <a
+        href="orders.php"
+        class="btn btn-secondary btn-lg">
 
-Place Order
-
-</button>
-
-<a
-href="orders.php"
-class="btn btn-secondary btn-lg">
-
-Cancel
-
-</a>
-
+        Cancel
+    </a>
 </div>
 
 </div>
@@ -242,56 +257,67 @@ Cancel
 </form>
 
 </div>
-
 </div>
 
 </div>
-
 </div>
-
 </div>
 
 <script>
+const product = document.getElementById("product_id");
+const lens = document.getElementById("lens_id");
+const coating = document.getElementById("coating_id");
+const qty = document.getElementById("quantity");
 
-const product=document.getElementById("product_id");
-const qty=document.getElementById("quantity");
+const priceBox = document.getElementById("price");
+const stockBox = document.getElementById("stock");
+const lensPriceBox = document.getElementById("lens_price");
+const coatingPriceBox = document.getElementById("coating_price");
+const totalBox = document.getElementById("total");
 
-product.addEventListener("change",function(){
-
-let selected=this.options[this.selectedIndex];
-
-let price=selected.getAttribute("data-price") || 0;
-let stock=selected.getAttribute("data-stock") || 0;
-
-document.getElementById("price").value=price;
-document.getElementById("stock").value=stock;
-
-qty.value="";
-document.getElementById("total").value="";
-
-});
-
-qty.addEventListener("input",function(){
-
-let price=parseFloat(document.getElementById("price").value)||0;
-
-let stock=parseInt(document.getElementById("stock").value)||0;
-
-let quantity=parseInt(this.value)||0;
-
-if(quantity>stock)
-{
-alert("Quantity exceeds available stock.");
-
-this.value=stock;
-
-quantity=stock;
+function getSelectedPrice(selectBox) {
+    let selected = selectBox.options[selectBox.selectedIndex];
+    return parseFloat(selected.getAttribute("data-price")) || 0;
 }
 
-document.getElementById("total").value="₹"+(price*quantity).toFixed(2);
+function calculateTotal() {
+    let framePrice = getSelectedPrice(product);
+    let lensPrice = getSelectedPrice(lens);
+    let coatingPrice = getSelectedPrice(coating);
+    let quantity = parseInt(qty.value) || 1;
 
+    let stock = parseInt(stockBox.value) || 0;
+
+    if (quantity > stock && stock > 0) {
+        alert("Quantity exceeds available stock.");
+        qty.value = stock;
+        quantity = stock;
+    }
+
+    priceBox.value = framePrice.toFixed(2);
+    lensPriceBox.value = lensPrice.toFixed(2);
+    coatingPriceBox.value = coatingPrice.toFixed(2);
+
+    let total = (framePrice + lensPrice + coatingPrice) * quantity;
+
+    totalBox.value = "₹" + total.toFixed(2);
+}
+
+product.addEventListener("change", function() {
+    let selected = this.options[this.selectedIndex];
+
+    let stock = selected.getAttribute("data-stock") || 0;
+
+    stockBox.value = stock;
+
+    calculateTotal();
 });
 
+lens.addEventListener("change", calculateTotal);
+coating.addEventListener("change", calculateTotal);
+qty.addEventListener("input", calculateTotal);
+
+calculateTotal();
 </script>
 
 <?php include("../includes/footer.php"); ?>

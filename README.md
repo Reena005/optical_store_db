@@ -90,3 +90,10 @@ Supplier ---- Products ---- Inventory
 │
 ├── index.php
 └── README.md
+
+
+Email:
+admin@gmail.com
+
+Password:
+admin123

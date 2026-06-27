@@ -171,7 +171,13 @@ class="btn btn-warning btn-sm">
 <i class="bi bi-pencil-fill"></i>
 
 </a>
-
+<a href="../prescriptions/prescription.php?customer_id=<?= $row['customer_id']; ?>"
+class="btn btn-info btn-sm">
+<i class="bi bi-eyeglasses"></i>
+</a>
+<a href="../prescriptions/history.php?customer_id=<?= $row['customer_id']; ?>" class="btn btn-dark btn-sm">
+    <i class="bi bi-clock-history"></i>
+</a>
 <a
 href="delete_customer.php?id=<?= $row['customer_id']; ?>"
 class="btn btn-danger btn-sm"

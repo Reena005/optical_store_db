@@ -1,15 +1,13 @@
 <?php
 
-$host = "localhost";
-$dbname = "optical_store";
-$user = "postgres";
-$password = "reena";
-
 $conn = pg_connect(
-    "host=$host dbname=$dbname user=$user password=$password"
+    "host=localhost
+     port=5432
+     dbname=optical_store
+     user=postgres
+     password=reena"
 );
 
 if (!$conn) {
-    die("Database Connection Failed");
+    die("Database connection failed.");
 }
-?>

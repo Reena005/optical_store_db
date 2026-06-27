@@ -53,11 +53,37 @@ Dashboard
         Deliveries
     </a>
 </li>
+<li class="nav-item">
+    <a href="../audit/audit_logs.php" class="nav-link text-white">
+        <i class="bi bi-journal-text"></i>
+        Audit Logs
+    </a>
+</li>
+
+<li class="nav-item">
+    <a href="../audit/notifications.php" class="nav-link text-white">
+        <i class="bi bi-bell-fill"></i>
+        Notifications
+    </a>
+</li>
+<li class="nav-item">
+    <a href="../appointments/appointments.php" class="nav-link text-white">
+        <i class="bi bi-calendar-check-fill"></i>
+        Appointments
+    </a>
+</li>
+<li class="nav-item">
+    <a href="../analytics/sales_dashboard.php" class="nav-link text-white">
+        <i class="bi bi-graph-up-arrow"></i>
+        Analytics
+    </a>
+</li>
         <li class="nav-item mb-2">
             <a href="../reports/reports.php" class="nav-link text-white">
                 <i class="bi bi-bar-chart"></i>
                 Reports
             </a>
+
        
 
     </ul>
